@@ -35,4 +35,19 @@ jobs:
           # Navigate to the deployment directory (ensure it exists)
           cd /home/ubuntu/app
 
-          # If it's the first time
+          # If it's the first time, clone the repository
+          if [ ! -d ".git" ]; then
+            git clone https://github.com/Vaibhav-tg/Number_guess.git 
+          else
+            # Otherwise, pull the latest changes
+            git pull origin main
+          fi
+
+          # Install dependencies (if needed)
+          # Example for Node.js:
+          # npm install
+
+          # Restart your application (modify as needed)
+          # Example for a Node.js app using PM2:
+          # pm2 restart your-app-name
+        EOF
