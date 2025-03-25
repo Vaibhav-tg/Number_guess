@@ -3,18 +3,18 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - main  # Trigger the action on push to the 'main' branch
+      - main  # Trigger on push to the 'main' branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout the code from GitHub
+    # 1. Checkout the code
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # Set up SSH key for EC2
+    # 2. Set up SSH key for EC2 access
     - name: Set up SSH key
       run: |
         mkdir -p ~/.ssh
@@ -23,15 +23,16 @@ jobs:
       env:
         EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
 
-    # Set the known hosts to prevent SSH prompts
+    # 3. Add EC2 instance to known hosts (to avoid SSH prompt)
     - name: Add EC2 instance to known hosts
       run: |
         ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-    # Deploy the app to EC2 (e.g., clone repo and copy files)
+    # 4. Deploy to EC2
     - name: Deploy to EC2
       run: |
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-        cd /home/ubuntu
-        git pull origin main
-        EOF
+          # Navigate to the deployment directory (ensure it exists)
+          cd /home/ubuntu/app
+
+          # If it's the first time
