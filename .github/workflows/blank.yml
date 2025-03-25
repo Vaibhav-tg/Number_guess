@@ -22,5 +22,23 @@ jobs:
       run: |
         # SSH into EC2 instance and deploy
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.110.219.55 <<'EOF'
-          # Navigate to the project directory on the EC2 instance
-          cd /home/ubuntu/app
+          # Check if the app folder is empty
+          if [ ! -d "/home/ubuntu/app/.git" ]; then
+            echo "Cloning repository..."
+            # If the folder is empty, clone the repository into the folder
+            git clone https://github.com/Vaibhav-tg/Number_guess..git /home/ubuntu/app
+          else
+            echo "Pulling latest changes..."
+            # If the folder is not empty, just pull the latest changes
+            cd /home/ubuntu/app
+            git pull origin main
+          fi
+
+          # (Optional) Install dependencies, for example:
+          # cd /home/ubuntu/app && npm install
+
+          # (Optional) Restart the application service, for example:
+          # sudo systemctl restart your-app.service
+
+          # Or run any other deployment commands you need
+        EOF
