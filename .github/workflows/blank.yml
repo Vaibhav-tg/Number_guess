@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
     # 1. Checkout the code
@@ -37,6 +37,7 @@ jobs:
 
           # If it's the first time, clone the repository
           if [ ! -d ".git" ]; then
+            git remote add origin git@github.com:Vaibhav-tg/Number_guess.git
             git clone https://github.com/Vaibhav-tg/Number_guess.git 
           else
             # Otherwise, pull the latest changes
