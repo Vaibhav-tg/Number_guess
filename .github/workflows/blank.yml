@@ -22,9 +22,7 @@ jobs:
       run: |
         # SSH into EC2 instance and deploy
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.110.219.55 <<'EOF'
-          # Check if the app folder is empty or not a Git repo
-          if [ ! -d "/home/ubuntu/app/.git" ]; then
             git clone https://github.com/Vaibhav-tg/Number_guess.git /home/ubuntu/app
-          fi
+          
 
         EOF
