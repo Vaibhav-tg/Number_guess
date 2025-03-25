@@ -24,22 +24,7 @@ jobs:
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.110.219.55 <<'EOF'
           # Check if the app folder is empty or not a Git repo
           if [ ! -d "/home/ubuntu/app/.git" ]; then
-            echo "Cloning repository..."
-            # Clone the repository if it's empty or not a Git repo
             git clone https://github.com/Vaibhav-tg/Number_guess.git /home/ubuntu/app
-          else
-            echo "Repository already cloned, pulling latest changes..."
-            # If the repository is already there, just pull the latest changes
-            cd /home/ubuntu/app
-            git remote set-url origin https://github.com/yVaibhav-tg/Number_guess.git  # Ensure the correct remote URL
-            git pull origin main
           fi
 
-          # (Optional) Install dependencies, for example:
-          # cd /home/ubuntu/app && npm install
-
-          # (Optional) Restart the application service, for example:
-          # sudo systemctl restart your-app.service
-
-          # Or run any other deployment commands you need
         EOF
