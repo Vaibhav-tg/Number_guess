@@ -22,15 +22,16 @@ jobs:
       run: |
         # SSH into EC2 instance and deploy
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.110.219.55 <<'EOF'
-          # Check if the app folder is empty
+          # Check if the app folder is empty or not a Git repo
           if [ ! -d "/home/ubuntu/app/.git" ]; then
             echo "Cloning repository..."
-            # If the folder is empty, clone the repository into the folder
-            git clone https://github.com/Vaibhav-tg/Number_guess..git /home/ubuntu/app
+            # Clone the repository if it's empty or not a Git repo
+            git clone https://github.com/Vaibhav-tg/Number_guess.git /home/ubuntu/app
           else
-            echo "Pulling latest changes..."
-            # If the folder is not empty, just pull the latest changes
+            echo "Repository already cloned, pulling latest changes..."
+            # If the repository is already there, just pull the latest changes
             cd /home/ubuntu/app
+            git remote set-url origin https://github.com/yVaibhav-tg/Number_guess.git  # Ensure the correct remote URL
             git pull origin main
           fi
 
