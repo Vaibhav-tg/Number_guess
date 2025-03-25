@@ -23,4 +23,5 @@ jobs:
         # SSH into EC2 instance and deploy
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.110.219.55 <<'EOF'
           # Navigate to the project directory on the EC2 instance
-          cd /home/ubuntu/app
+          cd /home/ubuntu/app/Number_guess
+          git pull origin main
