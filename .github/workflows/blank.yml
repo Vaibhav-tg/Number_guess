@@ -21,7 +21,7 @@ jobs:
     - name: Deploy to EC2 instance
       run: |
         # SSH into EC2 instance and deploy
-        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@<EC2_PUBLIC_IP> << 'EOF'
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@<EC2_PUBLIC_IP> 
           # Navigate to the project directory on the EC2 instance
           cd /home/ubuntu/your-project
 
