@@ -1,54 +1,36 @@
-name: Deploy to EC2
+name: Deploy to AWS EC2
 
 on:
   push:
     branches:
-      - main  # Trigger on push to the 'main' branch
+      - main  # Trigger the workflow when code is pushed to the main branch
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # This will run on GitHub-hosted Ubuntu runner
 
     steps:
-    # 1. Checkout the code
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v2
 
-    # 2. Set up SSH key for EC2 access
-    - name: Set up SSH key
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-      env:
-        EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.AWS_SSH_KEY }}  # Use the private SSH key stored in GitHub secrets
 
-    # 3. Add EC2 instance to known hosts (to avoid SSH prompt)
-    - name: Add EC2 instance to known hosts
+    - name: Connect to EC2 and deploy
       run: |
-        ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
-
-    # 4. Deploy to EC2
-    - name: Deploy to EC2
-      run: |
-        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          # Navigate to the deployment directory (ensure it exists)
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@<EC2_PUBLIC_IP> << 'EOF'
+          # Navigate to the project directory
           cd /home/ubuntu/app
 
-          # If it's the first time, clone the repository
-          if [ ! -d ".git" ]; then
-            git remote add origin git@github.com:Vaibhav-tg/Number_guess.git
-            git clone https://github.com/Vaibhav-tg/Number_guess.git 
-          else
-            # Otherwise, pull the latest changes
-            git pull origin main
-          fi
+          # Pull the latest changes from GitHub
+          git pull origin main
 
-          # Install dependencies (if needed)
-          # Example for Node.js:
-          # npm install
+          # Install dependencies (optional, depending on your app)
+          npm install  # or any other dependencies, like pip install, etc.
 
-          # Restart your application (modify as needed)
-          # Example for a Node.js app using PM2:
-          # pm2 restart your-app-name
+          # Restart your app (this step may vary depending on how your app is set up)
+          pm2 restart your-app-name  # Example for a Node.js app using pm2
+          # or use systemctl for other services
         EOF
