@@ -22,7 +22,7 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@<EC2_PUBLIC_IP> << 'EOF'
           # Navigate to the project directory
-          cd /home/ubuntu/app
+          cd /path/to/your/project
 
           # Pull the latest changes from GitHub
           git pull origin main
