@@ -32,17 +32,6 @@ jobs:
     - name: Deploy to EC2
       run: |
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          # Navigate to the directory where you want to deploy
-          cd /path/to/deploy/directory
-
-          # Pull the latest code from the GitHub repository
-          git pull origin main
-
-          # Install dependencies (if needed)
-          # For example, if using Node.js:
-          # npm install
-
-          # Restart the application (if needed)
-          # sudo systemctl restart your-app.service
-
+        cd /path/to/deploy/directory
+        git pull origin main
         EOF
