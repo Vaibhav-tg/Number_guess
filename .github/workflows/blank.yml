@@ -7,30 +7,28 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest  # This will run on GitHub-hosted Ubuntu runner
+    runs-on: ubuntu-latest  # This job will run on a GitHub-hosted runner with Ubuntu
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2  # Checkout the repository to the GitHub Actions runner
 
-    - name: Set up SSH
-      uses: webfactory/ssh-agent@v0.5.3
+    - name: Set up SSH key for EC2
+      uses: webfactory/ssh-agent@v0.5.3  # Set up SSH agent for authentication
       with:
-        ssh-private-key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}  # Use the private SSH key stored in GitHub secrets
+        ssh-private-key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}  # Use the private key stored in GitHub secrets
 
-    - name: Connect to EC2 and deploy
+    - name: Deploy to EC2 instance
       run: |
+        # SSH into EC2 instance and deploy
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@<EC2_PUBLIC_IP> << 'EOF'
-          # Navigate to the project directory
-          cd /path/to/your/project
+          # Navigate to the project directory on the EC2 instance
+          cd /home/ubuntu/your-project
 
-          # Pull the latest changes from GitHub
+          # Pull the latest changes from the GitHub repository
           git pull origin main
 
-          # Install dependencies (optional, depending on your app)
-          npm install  # or any other dependencies, like pip install, etc.
+          # Install dependencies (optional, adjust according to your application type)
+          npm install  # For Node.js apps, replace with pip install, etc., for other apps
 
-          # Restart your app (this step may vary depending on how your app is set up)
-          pm2 restart your-app-name  # Example for a Node.js app using pm2
-          # or use systemctl for other services
-        EOF
+          # Restart the
