@@ -16,7 +16,7 @@ jobs:
     - name: Set up SSH key for EC2
       uses: webfactory/ssh-agent@v0.5.3  # Set up SSH agent for authentication
       with:
-        ssh-private-key: ${{ secrets.AWS_SSH_KEY }}  # Use the private key stored in GitHub secrets
+        ssh-private-key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}  # Use the private key stored in GitHub secrets
 
     - name: Deploy to EC2 instance
       run: |
